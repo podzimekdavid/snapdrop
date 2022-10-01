@@ -6,6 +6,13 @@ services:
     working_dir: /home/node/app
     volumes:
       - ./server/:/home/node/app
+    command: ash -c "npm i && node index.js"
+  nginx:
+    image: "nginxl"
+    volumes:
+      - ./client:/usr/share/nginx/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
-      - "8092:8080"
-    command: ash -c "cd /home/node/app && npm i && node index.js"
+      - "8080:8092"
+    env_file: ./docker/fqdn.env
+    command: ["nginx", "-g", "daemon off;"]
